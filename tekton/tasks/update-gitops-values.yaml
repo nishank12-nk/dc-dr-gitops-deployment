@@ -22,9 +22,9 @@ spec:
       script: |
         #!/bin/sh
         set -e
-        git config --global --add safe.directory $(workspaces.source.path)
         cp $(workspaces.git-credentials.path)/.git-credentials /root/.git-credentials
         cp $(workspaces.git-credentials.path)/.gitconfig /root/.gitconfig
+        git config --global --add safe.directory $(workspaces.source.path)
         git config user.name "$(params.git-user-name)"
         git config user.email "$(params.git-user-email)"
         sed -i "s|tag:.*|tag: \"$(params.image-tag)\"|" $(params.chart-path)/values.yaml
