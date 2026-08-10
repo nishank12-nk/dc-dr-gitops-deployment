@@ -61,6 +61,8 @@ spec:
       workspaces:
         - name: source
           workspace: shared-workspace
+        - name: git-credentials
+          workspace: git-credentials
       params:
         - name: chart-path
           value: "charts/java-app"

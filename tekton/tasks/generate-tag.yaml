@@ -15,6 +15,7 @@ spec:
       script: |
         #!/bin/sh
         set -e
+        git config --global --add safe.directory $(workspaces.source.path)
         SHORT_SHA=$(git rev-parse --short HEAD)
         DATE_TAG=$(date +%Y%m%d%H%M)
         TAG="1.0.${DATE_TAG}-${SHORT_SHA}"
