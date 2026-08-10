@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: update-gitops-values
+spec:
+  params:
+    - name: chart-path
+      description: path to the Helm chart values.yaml relative to repo root
+    - name: image-tag
+      description: new image tag to set
+    - name: git-user-name
+      default: "tekton-ci-bot"
+    - name: git-user-email
+      default: "tekton-ci-bot@dcdr.local"
+  workspaces:
+    - name: source
+  steps:
+    - name: update-and-push
+      image: alpine/git
+      workingDir: $(workspaces.source.path)
+      script: |
+        #!/bin/sh
+        set -e
+        git config user.name "$(params.git-user-name)"
+        git config user.email "$(params.git-user-email)"
+        sed -i "s|tag:.*|tag: \"$(params.image-tag)\"|" $(params.chart-path)/values.yaml
+        cat $(params.chart-path)/values.yaml
+        git add $(params.chart-path)/values.yaml
+        git commit -m "ci: update $(params.chart-path) image tag to $(params.image-tag) [skip ci]" || echo "nothing to commit"
+        git push origin HEAD:main

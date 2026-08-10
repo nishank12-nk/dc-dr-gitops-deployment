@@ -1,0 +1,68 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: java-ci-pipeline
+spec:
+  params:
+    - name: repo-url
+      description: Git repo URL (dc-dr-gitops-deployment)
+    - name: revision
+      default: "main"
+  workspaces:
+    - name: shared-workspace
+    - name: git-credentials
+    - name: docker-credentials
+  tasks:
+    - name: fetch-source
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+        - name: basic-auth
+          workspace: git-credentials
+      params:
+        - name: url
+          value: $(params.repo-url)
+        - name: revision
+          value: $(params.revision)
+
+    - name: generate-tag
+      runAfter: ["fetch-source"]
+      taskRef:
+        name: generate-tag
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+
+    - name: build-and-push
+      runAfter: ["generate-tag"]
+      taskRef:
+        name: kaniko
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: dockerconfig
+          workspace: docker-credentials
+      params:
+        - name: IMAGE
+          value: "192.168.58.2:30002/library/java-app:$(tasks.generate-tag.results.image-tag)"
+        - name: CONTEXT
+          value: "apps/java-app"
+        - name: EXTRA_ARGS
+          value:
+            - "--insecure"
+            - "--skip-tls-verify"
+
+    - name: update-gitops
+      runAfter: ["build-and-push"]
+      taskRef:
+        name: update-gitops-values
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: chart-path
+          value: "charts/java-app"
+        - name: image-tag
+          value: "$(tasks.generate-tag.results.image-tag)"

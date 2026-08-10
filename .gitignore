@@ -1,0 +1,16 @@
+# Java
+apps/java-app/target/
+*.class
+
+# Python
+apps/python-app/venv/
+apps/python-app/__pycache__/
+*.pyc
+
+# Angular / Node
+apps/angular-app/node_modules/
+apps/angular-app/dist/
+
+# General
+.DS_Store
+*.log

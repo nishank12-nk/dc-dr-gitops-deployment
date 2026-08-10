@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: python-ci-run-
+spec:
+  pipelineRef:
+    name: python-ci-pipeline
+  params:
+    - name: repo-url
+      value: "https://github.com/<your-username>/dc-dr-gitops-deployment.git"
+    - name: revision
+      value: "main"
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
+    - name: git-credentials
+      secret:
+        secretName: git-credentials
+    - name: docker-credentials
+      secret:
+        secretName: harbor-docker-credentials
