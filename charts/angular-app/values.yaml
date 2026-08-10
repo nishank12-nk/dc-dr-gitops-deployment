@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: 192.168.58.2:30002/library/angular-app
-  tag: "latest"
+  tag: "1.0.202608100827-c015831"
   pullPolicy: IfNotPresent
 
 service:
