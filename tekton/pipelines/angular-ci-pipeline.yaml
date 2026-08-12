@@ -53,6 +53,7 @@ spec:
           value:
             - "--insecure"
             - "--skip-tls-verify"
+            - "--registry-mirror=mirror.gcr.io"
 
     - name: update-gitops
       runAfter: ["build-and-push"]
