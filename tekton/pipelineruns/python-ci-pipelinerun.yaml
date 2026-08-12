@@ -27,3 +27,5 @@ spec:
         items:
           - key: .dockerconfigjson
             path: config.json
+  taskRunTemplate:
+    serviceAccountName: tekton-git-sa

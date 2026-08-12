@@ -23,7 +23,7 @@ spec:
         #!/bin/sh
         set -e
         cp $(workspaces.git-credentials.path)/.git-credentials /root/.git-credentials
-        cp $(workspaces.git-credentials.path)/.gitconfig /root/.gitconfig
+        git config --global credential.helper store
         git config --global --add safe.directory $(workspaces.source.path)
         git config user.name "$(params.git-user-name)"
         git config user.email "$(params.git-user-email)"

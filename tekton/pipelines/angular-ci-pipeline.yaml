@@ -46,7 +46,7 @@ spec:
           workspace: docker-credentials
       params:
         - name: IMAGE
-          value: "192.168.58.2:30002/library/angular-app:$(tasks.generate-tag.results.image-tag)"
+          value: "192.168.49.2:30002/library/angular-app:$(tasks.generate-tag.results.image-tag)"
         - name: CONTEXT
           value: "apps/angular-app"
         - name: EXTRA_ARGS
