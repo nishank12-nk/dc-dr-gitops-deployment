@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: 192.168.49.2:30002/library/python-app
-  tag: "1.0.202608121113-150438e"
+  tag: "1.0.202608180601-add3be0"
   pullPolicy: IfNotPresent
 
 service:
